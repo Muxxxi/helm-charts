@@ -86,12 +86,39 @@ values.
 | `persistence.storageClass`  | StorageClass for the PVC                                                                    | `nil`           |
 | `persistence.storageSize`   | Size of the PVC                                                                             | `nil`           |
 
+
 ## TCP Configuration
-This chart currently has limited support for TCP ports. See [Known Limitations](#known-limitations)  
-[Check]((https://github.com/janosi/enhancements/blob/mixedprotocollb/keps/sig-network/20200103-mixed-protocol-lb.md#implementation-detailsnotesconstraints)) if your enviorment supports `mixed protocols`.
+This chart currently has limited support for TCP ports. See [Known Limitations](../README.md#known-limitations)  
+[Check](https://github.com/janosi/enhancements/blob/mixedprotocollb/keps/sig-network/20200103-mixed-protocol-lb.md#implementation-detailsnotesconstraints) if your enviorment supports `mixed protocols`.
 
 ### How to Enable TCP
-See [TCP configuration](./docs/tcp-configuration.md)
+ * Set `service.tcp.enabled` to `true` in the configuration option; and
+ * folow any additional specific instructions below
+
+The Following are known supported `LoadBalancers`:
+
+### MetalLB
+MetalLB supports `mixed protocols` by allowing multiple services to share the same IP address. See [IP Address Sharing](https://metallb.universe.tf/usage/#ip-address-sharing)  
+This is done by combining two services on a specfic annotation.
+
+
+Settings required:
+
+| Settings               | Value                                           | Comment                                                        |
+| -----------------------|-------------------------------------------------|----------------------------------------------------------------|
+| `services.tcp.type`    | `seperate`                                      | (default)                                                      |
+| `services.annotations` | `metallb.universe.tf/allow-shared-ip`: [string] | Where [string] is a string that uniquely identifies `shared-ip` services.|
+
+### Azure CPI LB (Untested)
+Azure supports `mixed protocols` by declaring that the ports specfied in the service are both TCP and UDP.
+This is done by specifying an annotation on a single service.
+
+Settings required:
+
+| Settings               | Value                                                                  | Comment 
+| -----------------------|------------------------------------------------------------------------|-----------------------------------------|
+| `services.tcp.type`    | `combined`                                                             |                                         |
+| `services.annotations` | `service.beta.kubernetes.io/azure-load-balancer-mixed-protocols`: true |                                         |
 
 ## Accessing the server
 After deploying the helm chart, you will see instructions to access your server in the commandline's stdout.
@@ -102,7 +129,7 @@ After deploying the helm chart, you will see instructions to access your server 
     * the ``LoadBalancer`` supports mixing both `UDP` and `TCP` ports. 
     (See [official support request](https://github.com/kubernetes/kubernetes/issues/23880))
 
-To configure TCP in supported environments see [TCP configuration](./docs/tcp-configuration.md)
+
 
 This means you can access and manage only the single
 default virtual server inside the Teamspeak server. If you want to manage multiple server, you can simply deploy this

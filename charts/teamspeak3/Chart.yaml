@@ -1,14 +1,10 @@
 apiVersion: v1
 description: teamspeak3 server
-engine: gotpl
 home: http://charts.sandermann.cloud/
 keywords:
 - teamspeak3
-maintainers:
-- email: kevin.sandermann@gmail.com
-  name: ksandermann
 name: teamspeak3
 sources:
-- https://github.com/ksandermann/helm-charts/blob/master/teamspeak3
+- https://github.com/Muxxxi/helm-charts/blob/master/teamspeak3
 version: 0.3.3
 appVersion: 3.13.5
