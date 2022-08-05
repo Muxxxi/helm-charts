@@ -1,36 +1,20 @@
 image:
   repository: teamspeak
-  tag: 3.13.5
-  pullPolicy: Always
-  ## Secret must be manually created in the namespace.
-  # pullSecret: "nexus-pull-secret"
+  tag: 3.13.7
+  pullPolicy: IfNotPresent
+
 podAnnotations: {}
+
 ## only NodePort and LoadBalancer supported, as this is UDP traffic
 service:
   type: LoadBalancer
   ## ip requests a specific IP address from the LoadBalancer (Supported only for LoadBalancer)
-  #ip: "IPAddress"
+  ip: ""
   ## externalIPs define a manual value if you are using a Bare-Metal Kubernetes cluster (Supported only for LoadBalancer)
-  #externalIPs:
-  #  - 1.2.3.4
-  #  - 4.5.6.7
-  
-  nodePort: 30987
-  ## tcp.enabled creates the TCP service if true (supported only if your LB implementation suports both TCP and UDP)
-  ## Needed until https://github.com/kubernetes/kubernetes/issues/23880 is implemented
-  ## See https://github.com/janosi/enhancements/blob/mixedprotocollb/keps/sig-network/20200103-mixed-protocol-lb.md#implementation-detailsnotesconstraints
-  ## Some mixed ports implementations use an annotation to merge services
-  ## known anotations:
-    ## MetalLB - metallb.universe.tf/allow-shared-ip: [string]
-    ## Azure CPI LB - service.beta.kubernetes.io/azure-load-balancer-mixed-protocols: [bool] (Not tested)
+  externalIPs: []
 
-  tcp:
-    enabled: false
-    ## type sets the implementation type. Values either combined | seperate. See docs.
-    type: "seperate"
-  annotations:
+  annotations: {}
     #metallb.universe.tf/allow-shared-ip: "{{ .Release.Name }}"
-    #service.beta.kubernetes.io/azure-load-balancer-mixed-protocols: "true"
     
 resources:
   limits:
@@ -40,15 +24,11 @@ resources:
     cpu: 100m
     memory: 256Mi
 
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
 persistence:
   enabled: false
   accessMode: ReadWriteOnce
   # existingClaim:
-  # annotations:
+  annotations: {}
   #  "helm.sh/resource-policy": keep
-  #storageClass: "azure-managed-ssd"
+  storageClass: ""
   storageSize: 1Gi

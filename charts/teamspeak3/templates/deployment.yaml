@@ -1,68 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "teamspeak3.fullname" . }}
   labels:
-    app: teamspeak
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "teamspeak3.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: teamspeak
-      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-      release: {{ .Release.Name }}
-      heritage: {{ .Release.Service }}
+      {{- include "teamspeak3.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- if .Values.podAnnotations }}
       annotations:
-{{ toYaml .Values.podAnnotations | indent 8 }}
+    {{- toYaml .Values.podAnnotations | indent 8 }}
     {{- end }}
       labels:
-        app: teamspeak
-        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        {{- include "teamspeak3.labels" . | nindent 8 }}
     spec:
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
       containers:
-      - name: teamspeak-server
+      - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-          - containerPort: 9987
+          - name: ts-voice
+            containerPort: 9987
             protocol: UDP
+          - name: ts-filetransfer
+            containerPort: 30033
+            protocol: TCP
+          - name: ts-serverquery
+            containerPort: 10022
+            protocol: TCP
         resources:
-{{ toYaml .Values.resources | indent 12 }}
+          {{- toYaml .Values.resources | nindent 12 }}
         env:
           - name: TS3SERVER_LICENSE
             value: accept
+          - name: TS3SERVER_QUERY_PROTOCOLS
+            value: ssh
         volumeMounts:
           - mountPath: /var/ts3server/
             name: teamspeak-data
-      {{- if .Values.image.pullSecret }}
-      imagePullSecrets:
-        - name: {{ .Values.image.pullSecret }}
-      {{- end }}
       volumes:
         - name: teamspeak-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-%s" (.Release.Name) "data") | quote  }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-%s" (include "teamspeak3.fullname" .) "data") | quote  }}
         {{- else }}
           emptyDir: {}
         {{- end }}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "teamspeak3.fullname" . }}-tcp
+  name: {{ include "teamspeak3.fullname" . }}-udp
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}
   {{- with .Values.service.annotations }}
@@ -18,13 +18,9 @@ spec:
   {{- toYaml .Values.service.externalIPs | nindent 6 }}
   {{- end }}
   ports:
-  - name: ts-filetransfer
-    port: 30033
-    protocol: TCP
-    targetPort: ts-filetransfer
-  - name: ts-serverquery
-    port: 10022
-    protocol: TCP
-    targetPort: ts-serverquery
+    - targetPort: ts-voice
+      protocol: UDP
+      name: ts-voice
+      port: 9987
   selector:
-    {{- include "teamspeak3.selectorLabels" . | nindent 4 }} 
+    {{- include "teamspeak3.selectorLabels" . | nindent 4 }}  

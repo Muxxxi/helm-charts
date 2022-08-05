@@ -1,10 +1,10 @@
 apiVersion: v1
 description: teamspeak3 server
-home: http://charts.sandermann.cloud/
+home: https://muxxxi.github.io/helm-charts
 keywords:
 - teamspeak3
 name: teamspeak3
 sources:
 - https://github.com/Muxxxi/helm-charts/blob/master/teamspeak3
-version: 0.3.3
-appVersion: 3.13.5
+version: 0.3.4
+appVersion: 3.13.7
