@@ -4,7 +4,6 @@ metadata:
   name: {{ include "teamspeak3.fullname" . }}-web
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}
-  {{- with .Values.service.annotations }}
 spec:
   type: ClusterIP
   ports:
