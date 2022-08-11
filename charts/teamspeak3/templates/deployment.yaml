@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teamspeak3.fullname" . }}
+  labels:
+    {{- include "teamspeak3.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "teamspeak3.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- if .Values.podAnnotations }}
+      annotations:
+    {{- toYaml .Values.podAnnotations | indent 8 }}
+    {{- end }}
+      labels:
+        {{- include "teamspeak3.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+          - name: ts-voice
+            containerPort: 9987
+            protocol: UDP
+          - name: ts-filetransfer
+            containerPort: 30033
+            protocol: TCP
+          - name: ts-serverquery
+            containerPort: 10022
+            protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        env:
+          - name: TS3SERVER_LICENSE
+            value: accept
+          - name: TS3SERVER_QUERY_PROTOCOLS
+            value: ssh
+        volumeMounts:
+          - mountPath: /var/ts3server/
+            name: teamspeak-data
+      volumes:
+        - name: teamspeak-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-%s" (include "teamspeak3.fullname" .) "data") | quote  }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}

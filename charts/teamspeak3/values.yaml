@@ -1,0 +1,34 @@
+image:
+  repository: teamspeak
+  tag: 3.13.7
+  pullPolicy: IfNotPresent
+
+podAnnotations: {}
+
+## only NodePort and LoadBalancer supported, as this is UDP traffic
+service:
+  type: LoadBalancer
+  ## ip requests a specific IP address from the LoadBalancer (Supported only for LoadBalancer)
+  ip: ""
+  ## externalIPs define a manual value if you are using a Bare-Metal Kubernetes cluster (Supported only for LoadBalancer)
+  externalIPs: []
+
+  annotations: {}
+    #metallb.universe.tf/allow-shared-ip: "{{ .Release.Name }}"
+    
+resources:
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  # existingClaim:
+  annotations: {}
+  #  "helm.sh/resource-policy": keep
+  storageClass: ""
+  storageSize: 1Gi

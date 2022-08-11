@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```bash
-helm repo add ksandermann http://charts.sandermann.cloud
+helm repo add muxxxi http://muxxxi.github.io/helm-charts
 helm repo update
 helm upgrade teamspeak \
     teamspeak \
@@ -86,12 +86,10 @@ values.
 | `persistence.storageClass`  | StorageClass for the PVC                                                                    | `nil`           |
 | `persistence.storageSize`   | Size of the PVC                                                                             | `nil`           |
 
-## TCP Configuration
-This chart currently has limited support for TCP ports. See [Known Limitations](#known-limitations)  
-[Check]((https://github.com/janosi/enhancements/blob/mixedprotocollb/keps/sig-network/20200103-mixed-protocol-lb.md#implementation-detailsnotesconstraints)) if your enviorment supports `mixed protocols`.
 
-### How to Enable TCP
-See [TCP configuration](./docs/tcp-configuration.md)
+## TCP Configuration
+This chart currently has limited support for TCP ports. See [Known Limitations](../README.md#known-limitations)  
+[Check](https://github.com/janosi/enhancements/blob/mixedprotocollb/keps/sig-network/20200103-mixed-protocol-lb.md#implementation-detailsnotesconstraints) if your enviorment supports `mixed protocols`.
 
 ## Accessing the server
 After deploying the helm chart, you will see instructions to access your server in the commandline's stdout.
@@ -102,7 +100,7 @@ After deploying the helm chart, you will see instructions to access your server 
     * the ``LoadBalancer`` supports mixing both `UDP` and `TCP` ports. 
     (See [official support request](https://github.com/kubernetes/kubernetes/issues/23880))
 
-To configure TCP in supported environments see [TCP configuration](./docs/tcp-configuration.md)
+
 
 This means you can access and manage only the single
 default virtual server inside the Teamspeak server. If you want to manage multiple server, you can simply deploy this

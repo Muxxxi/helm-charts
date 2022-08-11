@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teamspeak3.fullname" . }}-udp
+  labels:
+    {{- include "teamspeak3.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "LoadBalancer") ( .Values.service.ip ) }}
+  loadBalancerIP: {{ .Values.service.ip }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") ( .Values.service.externalIPs ) }}
+  externalIPs:
+  {{- toYaml .Values.service.externalIPs | nindent 6 }}
+  {{- end }}
+  ports:
+    - targetPort: ts-voice
+      protocol: UDP
+      name: ts-voice
+      port: 9987
+  selector:
+    {{- include "teamspeak3.selectorLabels" . | nindent 4 }}  
