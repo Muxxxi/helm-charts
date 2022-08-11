@@ -6,5 +6,5 @@ keywords:
 name: teamspeak3
 sources:
 - https://github.com/Muxxxi/helm-charts/blob/master/teamspeak3
-version: 0.3.8
+version: 0.3.9
 appVersion: 3.13.7
