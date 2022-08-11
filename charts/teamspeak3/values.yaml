@@ -3,14 +3,9 @@ image:
   tag: 3.13.7
   pullPolicy: IfNotPresent
 
-ts3manager:
-  image:
-    repository: joni1802/ts3-manager
-    tag: latest
-    pullPolicy: IfNotPresent
-  whitelist: ""
-
 podAnnotations: {}
+
+queryProtocols: "ssh,http"
 
 ## only NodePort and LoadBalancer supported, as this is UDP traffic
 service:
@@ -40,12 +35,10 @@ persistence:
   storageClass: ""
   storageSize: 1Gi
 
-
 ingress:
   enabled: true
   annotations: {}
   ingressClassName: ""
-  path: /
   hosts: []
     # virtualHost (default value is pi.hole) will be appended to the hosts
     # - chart-example.local
@@ -55,3 +48,21 @@ ingress:
   #     #- virtualHost (default value is pi.hole) will be appended to the hosts
   #      - chart-example.local 
   
+ts3manager:
+  image:
+    repository: joni1802/ts3-manager
+    tag: latest
+    pullPolicy: IfNotPresent
+  whitelist: ""
+  ingress:
+    enabled: true
+    annotations: {}
+    ingressClassName: ""
+    hosts: []
+      # virtualHost (default value is pi.hole) will be appended to the hosts
+      # - chart-example.local
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #     #- virtualHost (default value is pi.hole) will be appended to the hosts
+    #      - chart-example.local 

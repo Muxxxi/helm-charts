@@ -1,16 +1,48 @@
-
-
-{{- if .Values.ingress.enabled -}}
-{{- $serviceName := printf "%s-%s" (include "teamspeak3.fullname" .) "web" -}}
-{{- $ingressPath := .Values.ingress.path -}}
+{{- if .Values.ts3manager.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "teamspeak3.fullname" . }}
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.ts3manager.ingress.annotations }}
   annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ts3manager.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ts3manager.ingress.ingressClassName }}
+{{- end }}
+{{- if .Values.ts3manager.ingress.tls }}
+  tls:
+{{ toYaml .Values.ts3manager.ingress.tls | indent 4 }}
+{{- end }}
+  rules:
+  {{- range .Values.ts3manager.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{- include "teamspeak3.fullname" . }}-web
+                port: 
+                  name: http
+  {{- end }}
+{{- end }}
+---
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "teamspeak3.fullname" . }}-api
+  labels:
+    {{- include "teamspeak3.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -26,12 +58,12 @@ spec:
     - host: {{ . | quote }}
       http:
         paths:
-          - path: {{ $ingressPath }}
+          - path: /api(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ $serviceName }}
+                name: {{- include "teamspeak3.fullname" . }}-tcp
                 port: 
-                  name: http
+                  name: ts-http-query
   {{- end }}
 {{- end }}

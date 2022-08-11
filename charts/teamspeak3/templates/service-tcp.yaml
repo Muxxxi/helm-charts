@@ -26,5 +26,9 @@ spec:
     port: 10022
     protocol: TCP
     targetPort: ts-serverquery
+  - name: ts-http-query
+    port: 10080
+    protocol: TCP
+    targetPort: ts-http-query
   selector:
     {{- include "teamspeak3.selectorLabels" . | nindent 4 }} 

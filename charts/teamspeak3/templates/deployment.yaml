@@ -40,13 +40,16 @@ spec:
             - name: ts-serverquery
               containerPort: 10022
               protocol: TCP
+            - name: ts-http-query
+              containerPort: 10080
+              protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: TS3SERVER_LICENSE
               value: accept
             - name: TS3SERVER_QUERY_PROTOCOLS
-              value: ssh
+              value: "{{ .Values.queryProtocols }}"
           volumeMounts:
             - mountPath: /var/ts3server/
               name: teamspeak-data
