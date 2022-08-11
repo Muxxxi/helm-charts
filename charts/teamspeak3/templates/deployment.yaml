@@ -18,30 +18,6 @@ spec:
       labels:
         {{- include "teamspeak3.labels" . | nindent 8 }}
     spec:
-      containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-          - name: ts-voice
-            containerPort: 9987
-            protocol: UDP
-          - name: ts-filetransfer
-            containerPort: 30033
-            protocol: TCP
-          - name: ts-serverquery
-            containerPort: 10022
-            protocol: TCP
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}
-        env:
-          - name: TS3SERVER_LICENSE
-            value: accept
-          - name: TS3SERVER_QUERY_PROTOCOLS
-            value: ssh
-        volumeMounts:
-          - mountPath: /var/ts3server/
-            name: teamspeak-data
       volumes:
         - name: teamspeak-data
         {{- if .Values.persistence.enabled }}
@@ -50,3 +26,42 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-server
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: ts-voice
+              containerPort: 9987
+              protocol: UDP
+            - name: ts-filetransfer
+              containerPort: 30033
+              protocol: TCP
+            - name: ts-serverquery
+              containerPort: 10022
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: TS3SERVER_LICENSE
+              value: accept
+            - name: TS3SERVER_QUERY_PROTOCOLS
+              value: ssh
+          volumeMounts:
+            - mountPath: /var/ts3server/
+              name: teamspeak-data
+        - name: {{ .Chart.Name }}-ts3manager
+          image: "{{ .Values.ts3manager.image.repository }}:{{ .Values.ts3manager.image.tag }}"
+          imagePullPolicy: {{ .Values.ts3manager.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: WHITELIST
+              value: "{{ .Values.ts3manager.whitelist }}"
+            
+          
+        
