@@ -6,6 +6,8 @@ metadata:
     {{- include "teamspeak3.labels" . | nindent 4 }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "teamspeak3.selectorLabels" . | nindent 6 }}
