@@ -1,7 +1,8 @@
+{{- $fullName := include "mychart.fullname" . -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "teamspeak3.fullname" . }}-tcp
+  name: {{ $fullName }}-tcp
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}
   {{- with .Values.service.annotations }}
