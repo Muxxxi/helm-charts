@@ -1,7 +1,7 @@
 {{- $fullName := include "teamspeak3.fullname" . -}}
 apiVersion: v1
 kind: Service
-metadata:i
+metadata:
   name: {{ $fullName }}-web
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}

@@ -1,4 +1,4 @@
-{{- $fullName := include "mychart.fullname" . -}}
+{{- $fullName := include "teamspeak3.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
