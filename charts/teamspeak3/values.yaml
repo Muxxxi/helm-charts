@@ -5,6 +5,9 @@ image:
 
 podAnnotations: {}
 
+nameOverride: ""
+fullnameOverride: ""
+
 queryProtocols: "ssh,http"
 
 ## only NodePort and LoadBalancer supported, as this is UDP traffic
