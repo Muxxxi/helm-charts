@@ -3,6 +3,20 @@ entries:
   teamspeak3:
   - apiVersion: v1
     appVersion: 3.13.7
+    created: "2022-09-15T18:39:50.151163881Z"
+    description: teamspeak3 server
+    digest: 22fb4d95e2bb1be6aab2e6056919fec5b42ce28a3cdbaa7354669bfe32a3912d
+    home: https://muxxxi.github.io/helm-charts
+    keywords:
+    - teamspeak3
+    name: teamspeak3
+    sources:
+    - https://github.com/Muxxxi/helm-charts/blob/master/teamspeak3
+    urls:
+    - https://github.com/Muxxxi/helm-charts/releases/download/teamspeak3-0.3.14/teamspeak3-0.3.14.tgz
+    version: 0.3.14
+  - apiVersion: v1
+    appVersion: 3.13.7
     created: "2022-08-31T22:28:29.858396539Z"
     description: teamspeak3 server
     digest: 7d88b88d82a87b545a00efc2257c8c25ac21202d4553d17d19ceb48149105196
@@ -141,4 +155,4 @@ entries:
     urls:
     - https://github.com/Muxxxi/helm-charts/releases/download/teamspeak3-0.3.4/teamspeak3-0.3.4.tgz
     version: 0.3.4
-generated: "2022-08-31T22:28:29.858748843Z"
+generated: "2022-09-15T18:39:50.151415284Z"
