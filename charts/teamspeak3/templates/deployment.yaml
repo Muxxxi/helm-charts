@@ -55,9 +55,9 @@ spec:
           volumeMounts:
             - mountPath: /var/ts3server/
               name: teamspeak-data
-        - name: {{ .Chart.Name }}-ts3manager
-          image: "{{ .Values.ts3manager.image.repository }}:{{ .Values.ts3manager.image.tag }}"
-          imagePullPolicy: {{ .Values.ts3manager.image.pullPolicy }}
+        - name: {{ .Chart.Name }}-teamspeak3-server-viewer
+          image: "{{ .Values.ts3ServerViewer.image.repository }}:{{ .Values.ts3ServerViewer.image.tag }}"
+          imagePullPolicy: {{ .Values.ts3ServerViewer.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
@@ -65,8 +65,10 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            - name: WHITELIST
-              value: "{{ .Values.ts3manager.whitelist }}"
+            - name: TS_API_KEY
+              value: "{{ .Values.ts3ServerViewer.tsApiKey }}"
+            - name: TS_API_URL
+              value: "{{ .Values.ts3ServerViewer.tsApiUrl}}"
             
           
         

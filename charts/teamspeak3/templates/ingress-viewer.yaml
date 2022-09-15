@@ -5,24 +5,24 @@ metadata:
   name: {{ include "teamspeak3.fullname" . }}
   labels:
     {{- include "teamspeak3.labels" . | nindent 4 }}
-  {{- with .Values.ts3manager.ingress.annotations }}
+  {{- with .Values.ts3ServerViewer.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-{{- if .Values.ts3manager.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ts3manager.ingress.ingressClassName }}
+{{- if .Values.ts3ServerViewer.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ts3ServerViewer.ingress.ingressClassName }}
 {{- end }}
-{{- if .Values.ts3manager.ingress.tls }}
+{{- if .Values.ts3ServerViewer.ingress.tls }}
   tls:
-{{ toYaml .Values.ts3manager.ingress.tls | indent 4 }}
+{{ toYaml .Values.ts3ServerViewer.ingress.tls | indent 4 }}
 {{- end }}
   rules:
-  {{- range .Values.ts3manager.ingress.hosts }}
-    - host: {{ . | quote }}
+  {{- range .Values.ts3ServerViewer.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
+          - path: {{ .path | quote }}
             pathType: ImplementationSpecific
             backend:
               service:

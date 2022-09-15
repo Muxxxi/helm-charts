@@ -11,5 +11,5 @@ kubectl get svc {{ .Release.Name }} --output jsonpath='{.status.loadBalancer.ing
 {{- end }}
 
 You can get your privilege key by running:
-kubectl logs -l app=teamspeak -l heritage={{ .Release.Service }} -l release={{ .Release.Name }} -l chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }} -n {{ .Release.Namespace }}
+kubectl logs deployment/{{ .Release.Name }} -n apps {{ .Release.Name }}-server
 {{ .Release.Namespace }}

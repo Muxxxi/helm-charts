@@ -7,4 +7,4 @@ name: teamspeak3
 sources:
 - https://github.com/Muxxxi/helm-charts/blob/master/teamspeak3
 version: 0.3.13
-appVersion: 3.13.7
+appVersion: 3.14.1

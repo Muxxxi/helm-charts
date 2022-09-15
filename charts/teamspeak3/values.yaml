@@ -51,12 +51,11 @@ ingress:
   #     #- virtualHost (default value is pi.hole) will be appended to the hosts
   #      - chart-example.local 
   
-ts3manager:
+ts3ServerViewer:
   image:
-    repository: joni1802/ts3-manager
-    tag: latest
+    repository: statist48/teamspeak3-server-viewer
+    tag: v1.0.0
     pullPolicy: IfNotPresent
-  whitelist: ""
   ingress:
     enabled: true
     annotations: {}
