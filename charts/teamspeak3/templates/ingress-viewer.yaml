@@ -23,7 +23,7 @@ spec:
       http:
         paths:
           - path: {{ .path | quote }}
-            pathType: ImplementationSpecific
+            pathType: {{ .pathType | quote }}
             backend:
               service:
                 name: {{ $fullName }}-web
