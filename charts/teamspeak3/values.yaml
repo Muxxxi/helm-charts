@@ -54,7 +54,7 @@ ingress:
 ts3ServerViewer:
   image:
     repository: statist48/teamspeak3-server-viewer
-    tag: v1.0.0
+    tag: v1.0.2
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
