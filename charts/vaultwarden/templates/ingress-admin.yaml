@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if and (eq .Values.ingress.enabled true) (eq .Values.admin.enabled true) -}}
 {{- $fullName := include "vaultwarden.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -13,12 +13,12 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "vaultwarden.labels" . | nindent 4 }}
-  {{- if .Values.ingress.annotations }}
-  {{- with .Values.ingress.annotations }}
+  {{- if .Values.admin.ingress.annotations }}
+  {{- with .Values.admin.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.ingress.extraAnnotations }}
+  {{- with .Values.admin.ingress.extraAnnotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
@@ -27,9 +27,9 @@ spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.admin.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.admin.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -38,7 +38,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.admin.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -59,5 +59,4 @@ spec:
               {{- end }}
           {{- end }}
     {{- end }}
-
 {{- end }}

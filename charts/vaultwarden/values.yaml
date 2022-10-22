@@ -5,6 +5,28 @@
 domain: ""
 domainWhitelist: ""
 
+admin:
+  enabled: false
+  adminToken: ""
+  ingress:
+    annotations: 
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    extraAnnotations: {}
+    hosts: []
+      # - host: sample-host
+      #   paths:
+      #     - path: /admin(/|$)(.*)
+      #       pathType: ImplementationSpecific
+    tls: []
+      # - secretName: sample-secret-cert
+      #   hosts:
+      #     - sample-host
+
+
 websocket:
   enabled: true
   service:
