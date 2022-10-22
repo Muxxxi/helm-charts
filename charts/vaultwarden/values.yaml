@@ -1,0 +1,108 @@
+# Default values for vaultwarden.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+domain: ""
+domainWhitelist: ""
+
+websocket:
+  enabled: true
+  service:
+    port: 3012
+  ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $http_connection;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      extraAnnotations: {}
+      hosts: []
+        # - host: sample-host
+        #   paths:
+        #     - path: /notifications/hub
+        #       pathType: Exact
+      tls: []
+        # - secretName: sample-secret-cert
+        #   hosts:
+        #     - sample-host
+
+replicaCount: 1
+
+image:
+  repository: vaultwarden/server
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: 
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+  extraAnnotations: {}
+  hosts: []
+    # - host: sample-host
+    #   paths:
+    #     - path: /
+    #       pathType: ImplementationSpecific
+  tls: []
+    # - secretName: sample-secret-cert
+    #   hosts:
+    #     - sample-host
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+affinity: {}
+
+extraEnvVars: []
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  # existingClaim:
+  annotations: {}
+  #  "helm.sh/resource-policy": keep
+  storageClass: ""
+  storageSize: 1Gi
+  existingClaim: ""

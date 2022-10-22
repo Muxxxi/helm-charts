@@ -1,0 +1,81 @@
+{{- $dbUrl := printf "%s-mariadb.%s.svc" .Release.Name .Release.Namespace -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vaultwarden.fullname" . }}
+  labels:
+    {{- include "vaultwarden.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "vaultwarden.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "vaultwarden.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: vaultwarden-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-%s" (include "vaultwarden.fullname" .) "data") | quote  }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            {{- if .Values.websocket.enabled }}
+            - name: websocket
+              continerPort: 3012
+              protocol: TCP
+            {{- end }}
+          env:
+            - name: DOMAIN
+              value: {{ required "Need domain name" .Values.domain | quote }}
+            - name: SIGNUPS_DOMAINS_WHITELIST
+              value: {{ required "Need set domain whitelist" .Values.domainWhitelist | quote }}
+            - name: SIGNUPS_VERIFY
+              value: {{ .Values.singupVerify | default true}}
+            {{- if .Values.websocket.enabled }}
+            - name: WEBSOCKET_ENABLED
+              value: true
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "vaultwarden.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}  
+          volumeMounts:
+            - mountPath: /data
+              name: vaultwarden-data 
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
