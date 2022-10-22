@@ -54,7 +54,7 @@ spec:
               value: {{ .Values.singupVerify | default "true"}}
             {{- if .Values.websocket.enabled }}
             - name: WEBSOCKET_ENABLED
-              value: true
+              value: "true"
             {{- end }}
             {{- if .Values.admin.enabled }}
             - name: ADMIN_TOKEN
