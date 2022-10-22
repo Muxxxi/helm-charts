@@ -10,7 +10,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-websocket
   labels:
     {{- include "vaultwarden.labels" . | nindent 4 }}
   {{- if .Values.websocket.ingress.annotations }}

@@ -4,6 +4,7 @@
 
 domain: ""
 domainWhitelist: ""
+singupVerify: "true"
 
 admin:
   enabled: false
