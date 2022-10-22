@@ -51,7 +51,7 @@ spec:
             - name: SIGNUPS_DOMAINS_WHITELIST
               value: {{ required "Need set domain whitelist" .Values.domainWhitelist | quote }}
             - name: SIGNUPS_VERIFY
-              value: {{ .Values.singupVerify | default "true"}}
+              value: {{ .Values.singupVerify | quote }}
             {{- if .Values.websocket.enabled }}
             - name: WEBSOCKET_ENABLED
               value: "true"
