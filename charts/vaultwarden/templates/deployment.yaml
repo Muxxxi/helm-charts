@@ -48,10 +48,10 @@ spec:
           env:
             - name: DOMAIN
               value: {{ required "Need domain name" .Values.domain | quote }}
-            - name: SIGNUPS_DOMAINS_WHITELIST
-              value: {{ required "Need set domain whitelist" .Values.domainWhitelist | quote }}
+            - name: SIGNUPS_ALLOWED
+              value: "false"
             - name: SIGNUPS_VERIFY
-              value: {{ .Values.singupVerify | quote }}
+              value: "true"
             {{- if .Values.websocket.enabled }}
             - name: WEBSOCKET_ENABLED
               value: "true"
