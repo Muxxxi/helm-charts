@@ -183,4 +183,15 @@ entries:
     urls:
     - https://github.com/Muxxxi/helm-charts/releases/download/teamspeak3-0.3.4/teamspeak3-0.3.4.tgz
     version: 0.3.4
-generated: "2022-10-20T14:58:27.558422498Z"
+  vaultwarden:
+  - apiVersion: v2
+    appVersion: 1.26.0
+    created: "2022-10-22T13:46:14.177030807Z"
+    description: Helm chart for vaultwarden alternative bitwarden server in Rust
+    digest: afa3045efe486408541dc877ec413bcd6898bc50ee7b4b16f0fa3a649f416ba0
+    name: vaultwarden
+    type: application
+    urls:
+    - https://github.com/Muxxxi/helm-charts/releases/download/vaultwarden-0.1.0/vaultwarden-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-10-22T13:46:14.177181511Z"
