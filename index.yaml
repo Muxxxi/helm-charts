@@ -186,6 +186,16 @@ entries:
   vaultwarden:
   - apiVersion: v2
     appVersion: 1.26.0
+    created: "2022-10-22T14:21:10.16127873Z"
+    description: Helm chart for vaultwarden alternative bitwarden server in Rust
+    digest: c0aa41f9eb04514517fd5acd3e2108fb27890780854534b66adbc926f480d44d
+    name: vaultwarden
+    type: application
+    urls:
+    - https://github.com/Muxxxi/helm-charts/releases/download/vaultwarden-0.1.1/vaultwarden-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.26.0
     created: "2022-10-22T13:46:14.177030807Z"
     description: Helm chart for vaultwarden alternative bitwarden server in Rust
     digest: afa3045efe486408541dc877ec413bcd6898bc50ee7b4b16f0fa3a649f416ba0
@@ -194,4 +204,4 @@ entries:
     urls:
     - https://github.com/Muxxxi/helm-charts/releases/download/vaultwarden-0.1.0/vaultwarden-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-22T13:46:14.177181511Z"
+generated: "2022-10-22T14:21:10.161409831Z"
